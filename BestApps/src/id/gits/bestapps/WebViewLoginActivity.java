@@ -38,7 +38,7 @@ public class WebViewLoginActivity extends ActionBarActivity {
 		WebView webView = (WebView) findViewById(R.id.webview);
 
 		webView.getSettings().setJavaScriptEnabled(true);
-		webView.setWebViewClient(new WebViewClient());
+		webView.setWebViewClient(new MyWebViewClient());
 
 		try {
 			String url = "http://sandbox.appprime.net/TelkomID_OAuth2/oauth/authorize?client_id="
@@ -56,16 +56,14 @@ public class WebViewLoginActivity extends ActionBarActivity {
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			Uri uri = Uri.parse(url);
-			if (uri.getHost().contains("test.com")) {
+			if (uri.toString().contains(Constants.ApiUrl.REDIRECT_TELKOMID)) {
 				// ambil code
 				String code = uri.getQueryParameter("code");
 				Toast.makeText(ctx, code, Toast.LENGTH_LONG).show();
 				// TODO process next oauth step
-				return false;
+				finish();
 			}
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-			startActivity(intent);
-			return true;
+			return false;
 		}
 	}
 
